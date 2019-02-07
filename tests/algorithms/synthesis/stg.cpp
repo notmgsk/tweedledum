@@ -7,6 +7,7 @@
 #include <kitty/constructors.hpp>
 #include <kitty/dynamic_truth_table.hpp>
 #include <sstream>
+#include <tweedledum/algorithms/simulation/simulate_pattern_classical.hpp>
 #include <tweedledum/algorithms/synthesis/stg.hpp>
 #include <tweedledum/gates/mcmt_gate.hpp>
 #include <tweedledum/networks/netlist.hpp>
@@ -30,29 +31,25 @@ inline auto circuit_and_map(uint32_t qubits)
 
 } // namespace tweedledum::detail
 
-// TODO: improve test case 
-TEST_CASE("Synthesize a simple function into a quantum network using stg_from_exact_esop",
-          "[stg]")
+TEST_CASE("Synthesize a simple function into a quantum network using stg_from_exact_esop", "[stg]")
 {
-	kitty::dynamic_truth_table tt(3);
-	kitty::create_from_binary_string(tt, "10000001");
-	auto [network, map] = detail::circuit_and_map<netlist<mcmt_gate>>(4u);
+	kitty::dynamic_truth_table tt(5);
+	kitty::create_from_hex_string(tt, "DA657041");
+	auto [network, map] = detail::circuit_and_map<netlist<mcmt_gate>>(6u);
 	stg_from_exact_esop()(network, map, tt);
 
-	CHECK(network.num_gates() == 8u);
-	CHECK(network.num_qubits() == 4u);
-
-	// for (auto i = 0ull; i < tt.num_bits(); ++i) {
-	// 	auto expected_output = i;
-	// 	if (kitty::get_bit(tt, i)) {
-	// 		expected_output |= 1 << tt.num_vars();
-	// 	}
-	// 	CHECK(simulate_pattern_classical(network, i) == expected_output);
-	// }
+	CHECK(network.num_gates() == 6u);
+	CHECK(network.num_qubits() == 6u);
+	for (auto i = 0ull; i < tt.num_bits(); ++i) {
+		auto expected_output = i;
+		if (kitty::get_bit(tt, i)) {
+			expected_output |= (1ull << tt.num_vars());
+		}
+		CHECK(simulate_pattern_classical(network, i) == expected_output);
+	}
 }
 
-TEST_CASE("Synthesize a simple function into a quantum network using stg_from_pkrm",
-          "[stg]")
+TEST_CASE("Synthesize a simple function into a quantum network using stg_from_pkrm", "[stg]")
 {
 	kitty::dynamic_truth_table tt(5);
 	kitty::create_from_hex_string(tt, "DA657041");
@@ -61,10 +58,16 @@ TEST_CASE("Synthesize a simple function into a quantum network using stg_from_pk
 
 	CHECK(network.num_gates() == 10u);
 	CHECK(network.num_qubits() == 6u);
+	for (auto i = 0ull; i < tt.num_bits(); ++i) {
+		auto expected_output = i;
+		if (kitty::get_bit(tt, i)) {
+			expected_output |= (1ull << tt.num_vars());
+		}
+		CHECK(simulate_pattern_classical(network, i) == expected_output);
+	}
 }
 
-TEST_CASE("Synthesize a simple function into a quantum network using stg_from_pprm",
-          "[stg]")
+TEST_CASE("Synthesize a simple function into a quantum network using stg_from_pprm", "[stg]")
 {
 	kitty::dynamic_truth_table tt(5);
 	kitty::create_from_hex_string(tt, "DA657041");
@@ -73,16 +76,22 @@ TEST_CASE("Synthesize a simple function into a quantum network using stg_from_pp
 
 	CHECK(network.num_gates() == 21u);
 	CHECK(network.num_qubits() == 6u);
+	for (auto i = 0ull; i < tt.num_bits(); ++i) {
+		auto expected_output = i;
+		if (kitty::get_bit(tt, i)) {
+			expected_output |= (1ull << tt.num_vars());
+		}
+		CHECK(simulate_pattern_classical(network, i) == expected_output);
+	}
 }
 
-TEST_CASE("Synthesize a simple function into a quantum network using stg_from_spectrum",
-          "[stg]")
+TEST_CASE("Synthesize a simple function into a quantum network using stg_from_spectrum", "[stg]")
 {
 	kitty::dynamic_truth_table tt(5);
 	kitty::create_from_hex_string(tt, "DA657041");
 	auto [network, map] = detail::circuit_and_map<netlist<mcmt_gate>>(6u);
 	stg_from_spectrum()(network, map, tt);
 
-	CHECK(network.num_gates() == 185u);
+	CHECK(network.num_gates() == 108u);
 	CHECK(network.num_qubits() == 6u);
 }
