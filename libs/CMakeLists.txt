@@ -21,3 +21,13 @@ if (NOT TARGET kitty)
   add_library(kitty INTERFACE)
   target_include_directories(kitty INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/kitty)
 endif()
+
+if (NOT TARGET lorina)
+  add_library(lorina INTERFACE)
+  target_include_directories(lorina INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/lorina)
+endif()
+
+if (NOT TARGET rang)
+  add_library(rang INTERFACE)
+  target_include_directories(rang INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/rang)
+endif()
