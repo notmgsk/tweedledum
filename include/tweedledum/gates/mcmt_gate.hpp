@@ -108,6 +108,15 @@ public:
 	{
 		return qid.index();
 	}
+
+	bool is_dependent(mcmt_gate const& other) const
+	{
+		if (is(gate_set::swap)) {
+			return ((controls_ & other.targets_) != 0 || (targets_ & other.targets_) != 0);
+
+		}
+		return ((controls_ & other.targets_) != 0);
+	}
 #pragma endregion
 
 #pragma region Const iterators
