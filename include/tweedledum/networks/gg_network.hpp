@@ -99,9 +99,19 @@ public:
 #pragma endregion
 
 #pragma region Nodes
-	auto& get_node(node_ptr_type node_ptr) const
+	node_type& get_node(node_ptr_type node_ptr) const
 	{
 		return storage_->nodes[node_ptr.index];
+	}
+
+	node_type& get_input(qubit_id qid) const
+	{
+		return storage_->nodes[storage_->inputs.at(qid.index())];
+	}
+
+	node_type& get_output(qubit_id qid) const
+	{
+		return storage_->outputs.at(qid.index());
 	}
 
 	auto node_to_index(node_type const& node) const
