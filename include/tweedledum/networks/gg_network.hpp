@@ -319,7 +319,7 @@ public:
 #pragma endregion
 
 #pragma region Visited flags
-	void clear_visited()
+	void clear_visited() const
 	{
 		std::for_each(storage_->nodes.begin(), storage_->nodes.end(),
 		              [](auto& node) { node.data[0].w = 0; });
@@ -332,7 +332,7 @@ public:
 		return node.data[0].w;
 	}
 
-	void set_visited(node_type const& node, uint32_t value)
+	void set_visited(node_type const& node, uint32_t value) const
 	{
 		node.data[0].w = value;
 	}
