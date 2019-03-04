@@ -117,6 +117,27 @@ public:
 		assert(0);
 		std::abort();
 	}
+
+	bool is_adjoint(mcst_gate const& other) const
+	{
+		if (this->adjoint() != other.operation()) {
+			return false;
+		}
+		if (target_ != other.target_) {
+			return false;
+		}
+		for (uint32_t i = 0; i < qid_slots_.size(); ++i) {
+			if (qid_slots_[i] != other.qid_slots_[i]) {
+				return false;
+			}
+		}
+		if (this->is_one_of(gate_set::rotation_x, gate_set::rotation_y, gate_set::rotation_z)) {
+			if (this->rotation_angle() + other.rotation_angle() != 0.0) {
+				return false;
+			}
+		}
+		return true;
+	}
 #pragma endregion
 
 #pragma region Const iterators
